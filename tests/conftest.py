@@ -20,7 +20,9 @@ import pytest
 
 
 def pytest_pyfunc_call(pyfuncitem):
-    """Automatically run async test functions via asyncio.run without needing pytest-asyncio."""
+    """Automatically run async test functions via asyncio.run if pytest-asyncio is not installed."""
+    if pyfuncitem.config.pluginmanager.hasplugin("asyncio"):
+        return None  # Let pytest-asyncio handle it
     if inspect.iscoroutinefunction(pyfuncitem.obj):
         testfunction = pyfuncitem.obj
         funcargs = {
