@@ -2,7 +2,7 @@
 
 > A clean, focused open-source agent that takes a research-style question and produces a structured, source-backed answer with confidence scores, known limitations, and clear reasoning.
 
-[![PyPI version](https://img.shields.io/badge/pypi-v0.1.0-blue.svg)](https://pypi.org/project/research-agent/)
+[![CI](https://github.com/spidervirus/ResearchAgent/actions/workflows/ci.yml/badge.svg)](https://github.com/spidervirus/ResearchAgent/actions/workflows/ci.yml)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-brightgreen.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Tests: 100% Pass](https://img.shields.io/badge/tests-23%20passed-success.svg)]()
