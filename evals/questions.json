@@ -1,0 +1,113 @@
+[
+  {
+    "id": "q01_vectordb_10k_qps",
+    "query": "Compare the top 3 open-source vector databases for a startup with 10k QPS and tight cost constraints",
+    "category": "database_selection",
+    "required_constraints": ["10k", "qps", "cost", "memory", "qdrant", "milvus"],
+    "min_confidence": 0.70,
+    "min_evidence_count": 2,
+    "require_citations": true,
+    "require_limitations": true,
+    "evaluation_rationale": "Must evaluate throughput per node, RAM efficiency (e.g. Rust vs JVM), and quantization trade-offs."
+  },
+  {
+    "id": "q02_pgvector_migration",
+    "query": "Should our engineering team migrate from PostgreSQL pgvector to a dedicated vector database at 5M vectors?",
+    "category": "migration_decision",
+    "required_constraints": ["pgvector", "5m", "postgres", "hnsw", "latency"],
+    "min_confidence": 0.75,
+    "min_evidence_count": 2,
+    "require_citations": true,
+    "require_limitations": true,
+    "evaluation_rationale": "Must analyze HNSW memory footprint in Postgres vs operational overhead of a second cluster."
+  },
+  {
+    "id": "q03_sqlite_vs_duckdb",
+    "query": "Compare SQLite with DuckDB for local analytics and embedded analytical workloads",
+    "category": "embedded_storage",
+    "required_constraints": ["sqlite", "duckdb", "olap", "oltp", "columnar", "parquet"],
+    "min_confidence": 0.80,
+    "min_evidence_count": 2,
+    "require_citations": true,
+    "require_limitations": true,
+    "evaluation_rationale": "Must distinguish columnar vectorized scans from row-oriented transactional B-tree lookups."
+  },
+  {
+    "id": "q04_qlora_vs_full_finetune",
+    "query": "What are the practical trade-offs between Quantized LoRA (QLoRA) and Full Fine-Tuning for domain-specific coding models?",
+    "category": "ai_training",
+    "required_constraints": ["qlora", "fine-tuning", "vram", "gpu", "adapter"],
+    "min_confidence": 0.80,
+    "min_evidence_count": 2,
+    "require_citations": true,
+    "require_limitations": true,
+    "evaluation_rationale": "Must contrast 4-bit NF4 single-GPU memory savings with training step speed and tokenizer adaptations."
+  },
+  {
+    "id": "q05_ebpf_cilium_servicemesh",
+    "query": "Is eBPF-based networking (Cilium) production-ready as a sidecarless service mesh compared to Istio Envoy?",
+    "category": "cloud_native",
+    "required_constraints": ["ebpf", "cilium", "istio", "envoy", "sidecar", "latency"],
+    "min_confidence": 0.75,
+    "min_evidence_count": 2,
+    "require_citations": true,
+    "require_limitations": true,
+    "evaluation_rationale": "Must address kernel version prerequisites, L7 proxy limitations, and per-pod memory savings."
+  },
+  {
+    "id": "q06_rag_chunking_strategies",
+    "query": "Compare fixed-size chunking versus semantic chunking for technical PDF document retrieval in RAG",
+    "category": "rag_architecture",
+    "required_constraints": ["chunking", "semantic", "rag", "retrieval", "embedding"],
+    "min_confidence": 0.70,
+    "min_evidence_count": 2,
+    "require_citations": true,
+    "require_limitations": true,
+    "evaluation_rationale": "Must assess retrieval recall vs computational cost of running semantic boundaries."
+  },
+  {
+    "id": "q07_kafka_vs_redpanda",
+    "query": "Compare Apache Kafka with Redpanda for a high-throughput event streaming pipeline on ARM64 servers",
+    "category": "event_streaming",
+    "required_constraints": ["kafka", "redpanda", "jvm", "c++", "latency", "arm64"],
+    "min_confidence": 0.75,
+    "min_evidence_count": 2,
+    "require_citations": true,
+    "require_limitations": true,
+    "evaluation_rationale": "Must weigh C++ thread-per-core predictability against Kafka ecosystem maturity."
+  },
+  {
+    "id": "q08_redis_vs_dragonfly",
+    "query": "Should a high-traffic cache cluster switch from Redis to Dragonfly to cut server instance counts?",
+    "category": "caching_infrastructure",
+    "required_constraints": ["redis", "dragonfly", "multithreaded", "memory", "throughput"],
+    "min_confidence": 0.70,
+    "min_evidence_count": 2,
+    "require_citations": true,
+    "require_limitations": true,
+    "evaluation_rationale": "Must evaluate multi-threaded lockless hardware utilization vs Redis cluster replication stability."
+  },
+  {
+    "id": "q09_clickhouse_vs_timescaledb",
+    "query": "Compare ClickHouse vs TimescaleDB for storing 1 billion IoT sensor telemetry events per day",
+    "category": "time_series",
+    "required_constraints": ["clickhouse", "timescale", "compression", "iot", "sql"],
+    "min_confidence": 0.75,
+    "min_evidence_count": 2,
+    "require_citations": true,
+    "require_limitations": true,
+    "evaluation_rationale": "Must compare columnar compression ratios against relational join ergonomics."
+  },
+  {
+    "id": "q10_rust_vs_go_microservices",
+    "query": "What are the p99 latency and memory footprint trade-offs between Rust and Go for low-latency API gateways?",
+    "category": "systems_programming",
+    "required_constraints": ["rust", "go", "p99", "gc", "garbage collection", "memory"],
+    "min_confidence": 0.80,
+    "min_evidence_count": 2,
+    "require_citations": true,
+    "require_limitations": true,
+    "evaluation_rationale": "Must analyze Go GC pause mitigation vs Rust compile times and developer velocity."
+  }
+]
+

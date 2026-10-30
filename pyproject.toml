@@ -1,0 +1,74 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "research-agent"
+version = "0.1.0"
+description = "A structured, source-backed AI research agent with confidence calibration, evaluation harness, and human-in-the-loop support"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+keywords = ["ai", "research", "agent", "llm", "rag", "mcp", "confidence-calibration"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "pydantic>=2.5.0",
+    "httpx>=0.27.0",
+    "rich>=13.7.0",
+    "python-dotenv>=1.0.0",
+    "tenacity>=8.3.0",
+    "beautifulsoup4>=4.12.0",
+    "trafilatura>=1.9.0",
+]
+
+[project.optional-dependencies]
+openai = [
+    "openai>=1.30.0",
+    "tiktoken>=0.7.0",
+]
+anthropic = [
+    "anthropic>=0.25.0",
+]
+search = [
+    "duckduckgo-search>=6.1.0",
+]
+tavily = [
+    "tavily-python>=0.3.0",
+]
+mcp = [
+    "mcp>=0.1.0",
+]
+all = [
+    "openai>=1.30.0",
+    "tiktoken>=0.7.0",
+    "anthropic>=0.25.0",
+    "duckduckgo-search>=6.1.0",
+]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "pytest-mock>=3.12.0",
+    "ruff>=0.4.0",
+    "mypy>=1.10.0",
+]
+
+[project.scripts]
+research-agent = "research_agent.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["research_agent*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
