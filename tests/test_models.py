@@ -58,6 +58,15 @@ def test_research_plan_properties() -> None:
     assert len(plan.failed_steps) == 1
     assert plan.is_complete
 
+    step3 = PlanStep(description="Step 3", tool_name="code_runner", depends_on=["1", 2])
+    assert step3.depends_on == ["1", "2"]
+    step3.mark_skipped("Prerequisite failed")
+    assert step3.status == StepStatus.SKIPPED
+
+    plan2 = ResearchPlan(query="Test 2", steps=[step3])
+    assert len(plan2.skipped_steps) == 1
+    assert plan2.is_complete
+
 
 def test_evidence_score_clamping() -> None:
     ev = Evidence(

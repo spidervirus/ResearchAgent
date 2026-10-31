@@ -90,5 +90,15 @@ Often, research requires calculations: converting currency, computing memory for
 - **Output Capping**: Limits stdout/stderr to 128KB to prevent memory exhaustion from infinite print loops.
 - **Toggle Flag**: Can be completely disabled by setting `CODE_RUNNER_ENABLED=false` in `.env`.
 
+---
+
+## 4. Concurrent Execution & DAG Resolution (`executor.py`)
+
+Rather than running independent plan steps sequentially, `Executor` executes them in concurrent waves:
+- **`asyncio.gather()`**: Dispatches independent searches and page fetches concurrently.
+- **`asyncio.Semaphore` Throttling**: Limits active simultaneous connections (default: `MAX_CONCURRENT_TOOLS=4`) to respect rate limits.
+- **DAG Dependency Resolution**: Steps with `depends_on` wait until prerequisite steps finish (`DONE`). If a prerequisite fails, dependent steps are cleanly `SKIPPED`.
+- **Smart URL Injection**: A `fetch_page` step with `url="auto"` automatically receives the top URL from its search prerequisite.
+
 In the next chapter, we look at **Chapter 5: The Verifier & Critic** to see how raw evidence is graded, filtered, and checked for contradictions.
 

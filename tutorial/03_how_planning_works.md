@@ -52,8 +52,10 @@ Available tools:
 Rules:
 1. Return ONLY a valid JSON object — no prose, no markdown, no code fences.
 2. The JSON must have exactly two keys: "rationale" (string) and "steps" (array).
-3. Each step object: { "description": "...", "tool_name": "...", "tool_args": { ... } }
-4. Aim for 4–8 steps. Quality over quantity.
+3. Each step object: { "description": "...", "tool_name": "...", "tool_args": { ... }, "depends_on": [] }
+4. Steps with empty "depends_on": [] execute concurrently in parallel!
+5. If a step depends on an earlier step, list the 1-based index in "depends_on", e.g. ["1"].
+6. Aim for 3–6 steps. Quality over quantity.
 """
 ```
 

@@ -5,7 +5,7 @@
 [![CI](https://github.com/spidervirus/ResearchAgent/actions/workflows/ci.yml/badge.svg)](https://github.com/spidervirus/ResearchAgent/actions/workflows/ci.yml)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-brightgreen.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Tests: 100% Pass](https://img.shields.io/badge/tests-23%20passed-success.svg)]()
+[![Tests: 100% Pass](https://img.shields.io/badge/tests-29%20passed-success.svg)]()
 [![Code Style: Ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 
 ---
@@ -295,6 +295,7 @@ Options:
   -p, --provider TEXT      LLM provider: openai | anthropic | ollama
   -m, --model TEXT         LLM model name
   -s, --search TEXT        Search backend: duckduckgo | tavily | serpapi
+  -c, --concurrency INT    Max concurrent tool executions (default: 4)
   --human-gate / --no-human-gate  Toggle approval checkpoints
   --session-id TEXT        Link or resume a previous session
   -o, --output FORMAT      rich (default) | json | markdown
@@ -320,10 +321,11 @@ All settings can be placed in `.env` or passed via environment variables:
 | `DEFAULT_LLM_MODEL` | `gpt-4o-mini` | Default model identifier |
 | `OLLAMA_BASE_URL` | `http://localhost:11434` | Ollama local endpoint |
 | `DEFAULT_SEARCH_PROVIDER` | `duckduckgo` | `duckduckgo`, `tavily`, or `serpapi` |
+| `MAX_CONCURRENT_TOOLS` | `4` | Concurrency limit for parallel tool execution |
 | `TAVILY_API_KEY` | `""` | Optional Tavily API key |
 | `SERPAPI_API_KEY` | `""` | Optional SerpAPI key |
 | `HUMAN_GATE_ENABLED` | `false` | Enable interactive approval checkpoints |
-| `CODE_RUNNER_ENABLED` | `true` | Enable sandboxed code execution |
+| `CODE_RUNNER_ENABLED` | `false` | Enable sandboxed code execution (opt-in for security) |
 | `SESSION_DB_PATH` | `~/.research_agent/sessions.db` | SQLite database file location |
 
 ---

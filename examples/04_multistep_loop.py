@@ -73,7 +73,7 @@ async def main() -> None:
     }
     executor = Executor(tools=tools)
 
-    console.print(f"[dim]Executing {len(ctx.plan.steps)} plan steps sequentially...[/dim]\n")
+    console.print(f"[dim]Executing {len(ctx.plan.steps)} plan steps concurrently (throttled by semaphore)...[/dim]\n")
     await executor.execute(ctx)
 
     # Render step statuses

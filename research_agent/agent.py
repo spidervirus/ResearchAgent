@@ -86,6 +86,7 @@ class ResearchAgent:
         human_gate: Optional[bool] = None,
         session_id: Optional[str] = None,
         max_iterations: Optional[int] = None,
+        max_concurrency: Optional[int] = None,
         verbose: bool = True,
         tools: Optional[list[BaseTool]] = None,
         llm: Optional[BaseLLM] = None,
@@ -122,7 +123,10 @@ class ResearchAgent:
 
         # 5. Pipeline Stages
         self.planner = Planner(llm=self.llm, max_steps=max_iterations or settings.max_plan_steps)
-        self.executor = Executor(tools=self.tools)
+        self.executor = Executor(
+            tools=self.tools,
+            max_concurrency=max_concurrency or settings.max_concurrent_tools,
+        )
         self.verifier = Verifier(llm=self.llm, min_relevance_score=settings.min_relevance_score)
         self.synthesizer = Synthesizer(llm=self.llm)
 

@@ -27,6 +27,7 @@ class StepStatus(str, Enum):
     RUNNING = "running"
     DONE = "done"
     FAILED = "failed"
+    SKIPPED = "skipped"
 
 
 class Severity(str, Enum):
@@ -62,12 +63,27 @@ class PlanStep(BaseModel):
     tool_name: str = Field(..., min_length=1, description="Registered tool name to invoke")
     tool_args: dict[str, Any] = Field(default_factory=dict)
     status: StepStatus = Field(default=StepStatus.PENDING)
+    depends_on: list[str] = Field(
+        default_factory=list,
+        description="IDs or 1-based indices of prerequisite steps that must complete before this step runs",
+    )
     result: Optional[Any] = Field(default=None)
     error: Optional[str] = Field(default=None)
     started_at: Optional[datetime] = Field(default=None)
     finished_at: Optional[datetime] = Field(default=None)
 
     model_config = {"use_enum_values": True}
+
+    @field_validator("depends_on", mode="before")
+    @classmethod
+    def _coerce_depends_on(cls, v: Any) -> list[str]:
+        if not v:
+            return []
+        if isinstance(v, (str, int)):
+            return [str(v)]
+        if isinstance(v, (list, tuple, set)):
+            return [str(x) for x in v if x is not None]
+        return []
 
     def mark_running(self) -> None:
         """Transition the step to RUNNING state."""
@@ -84,6 +100,12 @@ class PlanStep(BaseModel):
         """Transition the step to FAILED state and record the error."""
         self.status = StepStatus.FAILED
         self.error = error
+        self.finished_at = datetime.now(tz=timezone.utc)
+
+    def mark_skipped(self, reason: str) -> None:
+        """Transition the step to SKIPPED state and record reason."""
+        self.status = StepStatus.SKIPPED
+        self.error = reason
         self.finished_at = datetime.now(tz=timezone.utc)
 
     @property
@@ -128,9 +150,17 @@ class ResearchPlan(BaseModel):
         return [s for s in self.steps if s.status == StepStatus.FAILED]
 
     @property
+    def skipped_steps(self) -> list[PlanStep]:
+        """Return all skipped steps."""
+        return [s for s in self.steps if s.status == StepStatus.SKIPPED]
+
+    @property
     def is_complete(self) -> bool:
-        """``True`` when every step is DONE or FAILED."""
-        return all(s.status in (StepStatus.DONE, StepStatus.FAILED) for s in self.steps)
+        """``True`` when every step is DONE, FAILED, or SKIPPED."""
+        return all(
+            s.status in (StepStatus.DONE, StepStatus.FAILED, StepStatus.SKIPPED)
+            for s in self.steps
+        )
 
 
 # ---------------------------------------------------------------------------

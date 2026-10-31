@@ -191,6 +191,7 @@ def run_research(args: argparse.Namespace) -> None:
         search_provider=args.search,
         human_gate=gate,
         session_id=args.session_id,
+        max_concurrency=args.concurrency,
         verbose=verbose,
     )
 
@@ -258,6 +259,7 @@ def main() -> None:
     p_res.add_argument("-p", "--provider", help="LLM provider: openai | anthropic | ollama")
     p_res.add_argument("-m", "--model", help="Model name (e.g., gpt-4o, claude-3-5-sonnet-20241022, llama3)")
     p_res.add_argument("-s", "--search", help="Search provider: duckduckgo | tavily | serpapi")
+    p_res.add_argument("-c", "--concurrency", type=int, default=None, help="Max concurrent tool executions (default: 4)")
     p_res.add_argument("--human-gate", action="store_true", default=None, help="Enable approval checkpoints")
     p_res.add_argument("--no-human-gate", action="store_true", help="Bypass approval checkpoints")
     p_res.add_argument("--session-id", help="Session ID to resume or link")

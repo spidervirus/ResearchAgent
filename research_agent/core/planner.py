@@ -46,12 +46,14 @@ Available tools:
 Rules:
 1. Return ONLY a valid JSON object — no prose, no markdown, no code fences.
 2. The JSON must have exactly two keys: "rationale" (string) and "steps" (array).
-3. Each step object: { "description": "...", "tool_name": "...", "tool_args": { ... } }
-4. Aim for 4–8 steps.  Quality over quantity.
-5. Always start with at least one web_search step.
-6. If the query needs numeric analysis, include a run_code step at the end.
-7. Do NOT hallucinate URLs — only use fetch_page for URLs returned by web_search.
-8. If previous context is provided, build on it rather than repeating work.
+3. Each step object: { "description": "...", "tool_name": "...", "tool_args": { ... }, "depends_on": [] }
+4. Steps with empty "depends_on": [] execute concurrently in parallel! Use this for independent searches across different technologies, aspects, or questions to minimize latency.
+5. If a step depends on results from an earlier step, list the 1-based step index in "depends_on", e.g. ["1"].
+6. Aim for 3–6 steps. Quality over quantity.
+7. Always start with independent web_search steps running in parallel.
+8. If the query needs numeric analysis, include a run_code step at the end.
+9. Do NOT hallucinate URLs — only use fetch_page for known documentation URLs or use "auto" to fetch top URLs from prior search dependencies.
+10. If previous context is provided, build on it rather than repeating work.
 """
 
 
@@ -113,6 +115,7 @@ def _parse_plan(raw: str, ctx: ResearchContext) -> ResearchPlan:
                 description=raw_step.get("description", "Research step"),
                 tool_name=raw_step.get("tool_name", "web_search"),
                 tool_args=raw_step.get("tool_args", {}),
+                depends_on=raw_step.get("depends_on", []),
             )
             steps.append(step)
         except Exception as exc:  # noqa: BLE001

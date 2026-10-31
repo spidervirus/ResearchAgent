@@ -65,6 +65,9 @@ class Settings:
     max_plan_steps: int = field(
         default_factory=lambda: int(os.getenv("MAX_PLAN_STEPS", "8"))
     )
+    max_concurrent_tools: int = field(
+        default_factory=lambda: int(os.getenv("MAX_CONCURRENT_TOOLS", "4"))
+    )
     request_timeout: float = field(
         default_factory=lambda: float(os.getenv("REQUEST_TIMEOUT", "60.0"))
     )
