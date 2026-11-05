@@ -74,3 +74,4 @@ def test_graceful_degradation_assessment():
     assert assessment.confidence <= 0.55
     assert any("page_fetcher" in r for r in assessment.degradation_reasons)
     assert any(l.severity == "high" for l in assessment.limitations)
+

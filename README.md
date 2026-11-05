@@ -17,7 +17,7 @@
 
 ## 💡 Why ResearchAgent? Learn How Agents Actually Work
 
-Most agent repositories in 2025 are either:
+Most agent repositories in 2026 are either:
 1. **Black-box wrappers**: Prompt chains masked by hundreds of brittle abstract classes. When the agent gets stuck in a loop or hallucinates, you can't inspect why.
 2. **Shallow tool calling**: One LLM call with a web search tool and zero verification, asserting false conclusions with total confidence.
 
@@ -319,7 +319,7 @@ $$\text{confidence} = 0.30 \times \text{source\_count} + 0.25 \times \text{agree
 |--------|:------:|---------------------|
 | **Source Count & Authority** | 30% | $\ge 3$ authoritative, independent sources for 1.0; 1–2 sources = 0.5; 0 sources = 0.1 |
 | **Cross-Source Agreement** | 25% | Consensus across sources vs factual contradictions |
-| **Data Recency** | 15% | Timeliness relative to modern software versions (2023–2024+) |
+| **Data Recency** | 15% | Timeliness relative to modern software versions (2025–2026+) |
 | **Constraint Coverage** | 30% | Direct coverage of every specific user constraint (e.g. 10k QPS, ARM64, budget) |
 
 If tools fail or search returns zero credible sources, the agent activates **Graceful Degradation**, automatically caps confidence at $\le 45\%$, and flags degradation causes under Limitations.
