@@ -8,6 +8,10 @@
 [![Tests: 100% Pass](https://img.shields.io/badge/tests-29%20passed-success.svg)]()
 [![Code Style: Ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 
+<p align="center">
+  <img src="docs/assets/demo.gif" alt="ResearchAgent Demo" width="100%" />
+</p>
+
 ---
 
 ## Why ResearchAgent?
