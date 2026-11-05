@@ -10,8 +10,16 @@ Exports:
 """
 
 from research_agent.agent import ResearchAgent
+from research_agent.calibration import (
+    CalibratedAssessment,
+    CalibratedLimitation,
+    CalibrationFactors,
+    Calibrator,
+    EvidenceItem,
+)
 from research_agent.core.context import ResearchContext
 from research_agent.models import (
+    ConfidenceFactors,
     Evidence,
     FollowUpQuestion,
     Limitation,
@@ -22,10 +30,16 @@ from research_agent.models import (
     VerificationResult,
 )
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 __all__ = [
     "ResearchAgent",
+    "Calibrator",
+    "EvidenceItem",
+    "CalibrationFactors",
+    "CalibratedLimitation",
+    "CalibratedAssessment",
+    "ConfidenceFactors",
     "Evidence",
     "FollowUpQuestion",
     "Limitation",

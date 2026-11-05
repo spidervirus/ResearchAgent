@@ -1,11 +1,12 @@
 # 🔬 ResearchAgent
 
-> A clean, focused open-source agent that takes a research-style question and produces a structured, source-backed answer with confidence scores, known limitations, and clear reasoning.
+> **The cleanest, most inspectable research agent for learning how autonomous agents actually work.**  
+> Built without black-box agent frameworks. Every stage is under 250 lines of Python, auditable, and ships with progressive runnable tutorials, concurrent DAG tool execution, and an extracted reusable calibration layer.
 
 [![CI](https://github.com/spidervirus/ResearchAgent/actions/workflows/ci.yml/badge.svg)](https://github.com/spidervirus/ResearchAgent/actions/workflows/ci.yml)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-brightgreen.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Tests: 100% Pass](https://img.shields.io/badge/tests-29%20passed-success.svg)]()
+[![Tests: 100% Pass](https://img.shields.io/badge/tests-33%20passed-success.svg)]()
 [![Code Style: Ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 
 <p align="center">
@@ -14,16 +15,20 @@
 
 ---
 
-## Why ResearchAgent?
+## 💡 Why ResearchAgent? Learn How Agents Actually Work
 
-Most LLM agents are either **black-box search wrappers** or **overly complex, brittle frameworks** with hundreds of hidden abstractions. When they fail, you can't tell why. When they hallucinate, they sound completely confident.
+Most agent repositories in 2025 are either:
+1. **Black-box wrappers**: Prompt chains masked by hundreds of brittle abstract classes. When the agent gets stuck in a loop or hallucinates, you can't inspect why.
+2. **Shallow tool calling**: One LLM call with a web search tool and zero verification, asserting false conclusions with total confidence.
 
-**ResearchAgent** was designed to be:
-1. **Auditable & Reliable**: Every fact links directly to verified source evidence.
-2. **Transparent About Uncertainty**: Answers include calibrated confidence scores (e.g. `85%`) and explicit limitations.
-3. **Human-in-the-Loop**: Interactive checkpoints allow reviewing plans and evidence before execution or token expenditure.
-4. **Simple & Hackable**: Every stage is clean, documented, and under 250 lines of Python. Accompanied by a 10-chapter progressive tutorial.
-5. **100% Local Capable**: Works with OpenAI, Anthropic, or 100% locally via Ollama with zero API keys.
+**ResearchAgent is different.** It was built from the ground up for engineers who want to understand, build, and customize autonomous agents:
+
+- 📖 **100% Inspectable & Hackable**: No LangChain, CrewAI, or AutoGen abstractions. Every single module (`Planner`, `Executor`, `Verifier`, `Synthesizer`) is clean, heavily commented, and under 250 lines of pure Python.
+- 🎓 **Progressive 9-Step Runnable Curriculum**: Learn agent architecture incrementally from a raw LLM prompt up to full MCP tool integration and DAG waves.
+- ⚖️ **Reusable Calibration & Verification Layer**: Extracts confidence scoring into a stand-alone component that can be dropped into **Claude Code, OpenClaw, Hermes**, or any custom agent.
+- ⚡ **Concurrent DAG Wave Execution**: Independent tool queries execute in parallel via `asyncio.gather` with concurrency throttles, cutting latency from 30s to ~8s.
+- 🛡️ **Transparent Uncertainty**: The agent scores its own confidence across an explicit 4-factor matrix (Source Volume, Agreement, Recency, Constraint Coverage) and rates limitations by severity.
+- 💻 **100% Local-First Capable**: Works out of the box with OpenAI, Anthropic, or locally via Ollama with zero API keys.
 
 ---
 
@@ -189,9 +194,9 @@ Unlike monolithic agents, ResearchAgent operates in explicit, inspectable stages
 
 ---
 
-## 🎓 8 Progressive Runnable Examples (From Scratch to Agent)
+## 🎓 9 Progressive Runnable Examples (From Scratch to Agent)
 
-The repository ships with **8 self-contained, progressive tutorial scripts** in `examples/` that build on each other from a single prompt to a full MCP-connected agent:
+The repository ships with **9 self-contained, progressive tutorial scripts** in `examples/` that build on each other from a single prompt to a full MCP-connected agent and reusable confidence layer:
 
 | Step | Example File | What It Teaches | Why It Matters |
 |:---:|--------------|-----------------|----------------|
@@ -203,14 +208,64 @@ The repository ships with **8 self-contained, progressive tutorial scripts** in 
 | **6** | [`examples/06_structured_answer_confidence.py`](examples/06_structured_answer_confidence.py) | Structured answer with confidence + limitations | Replace messy prose with typed models, citations & caveats |
 | **7** | [`examples/07_human_in_the_loop_gates.py`](examples/07_human_in_the_loop_gates.py) | Human-in-the-loop approval gates | Intercept execution to inspect, edit, or abort runs |
 | **8** | [`examples/08_full_agent_mcp.py`](examples/08_full_agent_mcp.py) | Full agent + SQLite session memory + MCP tools | Complete production system connected to external MCP servers |
+| **9** | [`examples/09_reusable_calibration_layer.py`](examples/09_reusable_calibration_layer.py) | Reusable Confidence Calibration Layer | Drop-in verification & 4-factor scoring for Claude Code, OpenClaw, Hermes |
 
 Run any example directly:
 ```bash
 python examples/01_plain_llm_prompt.py
 python examples/02_tool_calling_search.py
 # ... up to
-python examples/08_full_agent_mcp.py
+python examples/09_reusable_calibration_layer.py
 ```
+
+---
+
+## ⚖️ Reusable Confidence Calibration Layer (For Any Agent)
+
+Most agent systems (such as Claude Code, OpenClaw, Hermes, or LangChain) return raw textual answers without quantifying their uncertainty. ResearchAgent extracts its **verification and confidence scoring matrix** into a standalone, framework-agnostic package:
+
+```python
+from research_agent.calibration import Calibrator, EvidenceItem
+
+calibrator = Calibrator(min_relevance_score=0.40)
+
+# Pass evidence gathered from any external agent or tool
+evidence = [
+    EvidenceItem(
+        url="https://arxiv.org/abs/2401.03456",
+        title="Vector DB Scaling Benchmarks",
+        excerpt="Qdrant sustained 12,400 QPS with p99 latency < 15ms.",
+        relevance=0.92,
+        quality=0.85,
+    ),
+    EvidenceItem(
+        url="https://docs.qdrant.tech/cloud/benchmarks",
+        title="Official Qdrant Docs",
+        excerpt="HNSW indexing delivers 10k-15k QPS with quantized memory reduction.",
+        relevance=0.88,
+        quality=0.80,
+    ),
+]
+
+# Produce a calibrated assessment with explicit limitations
+assessment = calibrator.assess(
+    evidence=evidence,
+    direct_answer="For high-throughput vector search on 50M vectors, Qdrant is recommended.",
+    agreement_score=0.90,
+    recency_score=0.95,
+    constraint_coverage_score=0.85,
+)
+
+print(f"Confidence: {assessment.confidence * 100}%")
+# -> Confidence: 85.0%
+print(f"Factors: {assessment.confidence_factors.model_dump()}")
+# -> {'source_count_score': 0.75, 'agreement_score': 0.9, 'recency_score': 0.95, 'constraint_coverage_score': 0.85, 'weighted_score': 0.85}
+```
+
+### Supported Integrations
+- **Claude Code**: Inject as a post-verification hook to score output confidence before saving code or conclusions.
+- **OpenClaw / Hermes**: Score web-browsing tool outputs and enforce source credibility filters.
+- **Custom Agent Loops**: Run `calibrator.assess()` to detect tool degradations and output structured caveats.
 
 ---
 
